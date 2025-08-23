@@ -5,8 +5,18 @@ const App = () => {
   const [currentWord, setCurrentWord] = React.useState("react");
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const [guessedLetters, setGuessedletters] = React.useState([]);
+  console.log(guessedLetters);
+
+  function addGuessedLetter(letter) {
+    setGuessedletters((prevLetters) => [...prevLetters, letter]);
+  }
   const keyboardElements = alphabet.split("").map((letter, index) => {
-    return <button key={index}>{letter.toLocaleUpperCase()}</button>;
+    return (
+      <button key={index} onClick={() => addGuessedLetter(letter)}>
+        {letter.toLocaleUpperCase()}
+      </button>
+    );
   });
 
   const languageElements = languages.map((lang) => {
