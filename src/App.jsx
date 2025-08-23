@@ -5,9 +5,8 @@ const App = () => {
   const [currentWord, setCurrentWord] = React.useState("react");
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  const buttonAlphabets = alphabet.split("").map((alpha, index) => {
-    console.log(alpha);
-    return <button key={index}>{alpha}</button>;
+  const keyboardElements = alphabet.split("").map((letter, index) => {
+    return <button key={index}>{letter.toLocaleUpperCase()}</button>;
   });
 
   const languageElements = languages.map((lang) => {
@@ -41,7 +40,8 @@ const App = () => {
       </section>
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElements}</section>
-      <section className="alpha">{buttonAlphabets}</section>
+      <section className="keyboard">{keyboardElements}</section>
+      <button className="new-game">New game</button>
     </main>
   );
 };
