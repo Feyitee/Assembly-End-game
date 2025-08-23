@@ -2,6 +2,11 @@ import React from "react";
 import { languages } from "./languages";
 
 const App = () => {
+  const [currentWord, setCurrentword] = React.useState("react");
+
+  const letterElements = currentWord.split(" ").map((letter) => {
+    return <span>{letter}</span>;
+  });
   const languageEls = function () {
     return languages.map((lang) => {
       const styles = {
@@ -10,7 +15,7 @@ const App = () => {
       };
       return (
         <span className="chip" style={styles} key={lang.name}>
-          {lang.name}
+          {lang.name.toUpperCase()}
         </span>
       );
     });
@@ -30,6 +35,7 @@ const App = () => {
         <p>Well done! 🎉</p>
       </section>
       <section className="language-chips">{languageEls()}</section>
+      <section>{letterEls}</section>
     </main>
   );
 };
