@@ -9,7 +9,9 @@ const App = () => {
   console.log(guessedLetters);
 
   function addGuessedLetter(letter) {
-    setGuessedletters((prevLetters) => [...prevLetters, letter]);
+    setGuessedletters((prevLetters) => {
+      prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter];
+    });
   }
   const keyboardElements = alphabet.split("").map((letter, index) => {
     return (
