@@ -17,12 +17,14 @@ export default function AssemblyEndgame() {
     (letter) => !currentWord.includes(letter)
   ).length;
 
-  const gameOver = wrongGuessCount > 8;
+  const gameLost = wrongGuessCount >= languages.length - 1;
 
   // Every returns a boolean value
   const gameWon = currentWord
     .split("")
     .every((letter) => guessedLetters.includes(letter));
+
+  const isgameOver = gameLost || gameLost;
 
   function addGuessedLetter(letter) {
     setGuessedLetters((prevLetters) =>
@@ -65,13 +67,37 @@ export default function AssemblyEndgame() {
       <button
         className={className}
         key={letter}
-        onClick={gameOver ? "undefined" : () => addGuessedLetter(letter)}
+        onClick={isgameOver ? "undefined" : () => addGuessedLetter(letter)}
       >
         {letter.toUpperCase()}
       </button>
     );
   });
 
+  function renderGameStatus() {
+    if (!isgameOver) {
+      return null;
+    }
+    if (gameLost) {
+      return (
+        <>
+          <h2>You win!</h2>
+          <p>Well done! 🎉</p>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h2>Game over!</h2>
+          <p>You lose! Better start learning Assembly 😭</p>
+        </>
+      );
+    }
+  }
+  const gamestatusClassname = clsx("game status", {
+    won: gameWon,
+    lost: gameLost,
+  });
   return (
     <main>
       <header>
@@ -81,14 +107,11 @@ export default function AssemblyEndgame() {
           from Assembly!
         </p>
       </header>
-      <section className="game-status">
-        <h2>You win!</h2>
-        <p>Well done! 🎉</p>
-      </section>
+      <section className={gamestatusClassname}>{renderGameStatus()}</section>
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElements}</section>
       <section className="keyboard">{keyboardElements}</section>
-      {(gameWon || gameOver) && <button className="new-game">New Game</button>}
+      {isgameOver && <button className="new-game">New Game</button>}
     </main>
   );
 }

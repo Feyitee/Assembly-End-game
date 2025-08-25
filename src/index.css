@@ -1,4 +1,4 @@
-=* {
+* {
   box-sizing: border-box;
 }
 
@@ -9,8 +9,12 @@ body {
   color: #d9d9d9;
   padding: 20px;
   height: 100vh;
+}
+
+main {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 header {
@@ -37,6 +41,8 @@ section.game-status {
   color: #f9f4da;
   border-radius: 4px;
   margin-block: 30px;
+  width: 100%;
+  max-width: 60px;
 }
 
 section.game-status > p {
@@ -132,4 +138,12 @@ button.new-game {
   display: block;
   margin-inline: auto;
   cursor: pointer;
+}
+
+section.game-status.won {
+  background-color: #10a95b;
+}
+
+section.game-status.lost {
+  background-color: #ba2a2a;
 }
