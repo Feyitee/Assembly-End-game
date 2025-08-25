@@ -19,7 +19,7 @@ const App = () => {
   const keyboardElements = alphabet.split("").map((letter, index) => {
     const isGuessed = guessedLetters.includes(letter);
     const isCorrect = isGuessed && currentWord.includes(letter);
-    const isWrong = isGuessed && !currentWord.includes(letter);
+    const isWrong = !isGuessed && !currentWord.includes(letter);
 
     const className = clsx({
       correct: isCorrect,
@@ -50,7 +50,11 @@ const App = () => {
 
   const letterElements = currentWord
     .split("")
-    .map((letter, index) => <span key={index}>{letter.toUpperCase()}</span>);
+    .map((letter, index) => (
+      <span key={index}>
+        {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
+      </span>
+    ));
 
   return (
     <main>
