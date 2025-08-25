@@ -1,26 +1,32 @@
 import { useState } from "react";
 import { clsx } from "clsx";
 import { languages } from "./languages";
+import { getFarewellText } from "./utils";
 import React from "react";
 
 export default function AssemblyEndgame() {
+  // State values
   const [currentWord, setCurrentWord] = React.useState("react");
   const [guessedLetters, setGuessedLetters] = React.useState([]);
 
-  // Static variables
-  const alphabet = "abcdefghijklmnopqrstuvwxyz";
-
-  // Derivative variables
-  const gameLost = wrongGuessCount >= languages.length - 1;
-  const isgameOver = gameLost || gameLost;
-
+  // Derived values
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter)
   ).length;
 
-  const gameWon = currentWord
+  console.log(wrongGuessCount);
+  const isGameWon = currentWord
     .split("")
     .every((letter) => guessedLetters.includes(letter));
+  const isGameLost = wrongGuessCount >= languages.length - 1;
+  const isGameOver = isGameWon || isGameLost;
+  const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
+  const isLastGuessIncorrect =
+    lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
+  console.log(isLastGuessIncorrect);
+
+  // Static values
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
   function addGuessedLetter(letter) {
     setGuessedLetters((prevLetters) =>
@@ -34,7 +40,7 @@ export default function AssemblyEndgame() {
       backgroundColor: lang.backgroundColor,
       color: lang.color,
     };
-    const className = clsx("chip", isLanguageLost);
+    const className = clsx("chip", isLanguageLost && "lost");
     return (
       <span className={className} style={styles} key={lang.name}>
         {lang.name}
@@ -63,25 +69,37 @@ export default function AssemblyEndgame() {
       <button
         className={className}
         key={letter}
-        onClick={isgameOver ? "undefined" : () => addGuessedLetter(letter)}
+        onClick={isGameOver ? undefined : () => addGuessedLetter(letter)}
       >
         {letter.toUpperCase()}
       </button>
     );
   });
 
+  const gameStatusClass = clsx("game-status", {
+    won: isGameWon,
+    lost: isGameLost,
+    farewell: !isGameOver && isLastGuessIncorrect,
+  });
+
   function renderGameStatus() {
-    if (!isgameOver) {
-      return null;
+    if (!isGameOver && isLastGuessIncorrect) {
+      return (
+        <p className="farewell-message">
+          {getFarewellText(languages[wrongGuessCount - 1].name)}
+        </p>
+      );
     }
-    if (gameLost) {
+
+    if (isGameWon) {
       return (
         <>
           <h2>You win!</h2>
           <p>Well done! 🎉</p>
         </>
       );
-    } else {
+    }
+    if (isGameLost) {
       return (
         <>
           <h2>Game over!</h2>
@@ -90,10 +108,7 @@ export default function AssemblyEndgame() {
       );
     }
   }
-  const gamestatusClassname = clsx("game status", {
-    won: gameWon,
-    lost: gameLost,
-  });
+
   return (
     <main>
       <header>
@@ -103,11 +118,11 @@ export default function AssemblyEndgame() {
           from Assembly!
         </p>
       </header>
-      <section className={gamestatusClassname}>{renderGameStatus()}</section>
+      <section className={gameStatusClass}>{renderGameStatus()}</section>
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElements}</section>
       <section className="keyboard">{keyboardElements}</section>
-      {isgameOver && <button className="new-game">New Game</button>}
+      {isGameOver && <button className="new-game">New Game</button>}
     </main>
   );
 }
