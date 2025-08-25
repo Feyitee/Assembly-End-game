@@ -7,7 +7,6 @@ const App = () => {
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   const [guessedLetters, setGuessedletters] = React.useState([]);
-  console.log(guessedLetters);
 
   function addGuessedLetter(letter) {
     setGuessedletters((prevLetters) => {
@@ -16,10 +15,19 @@ const App = () => {
         : [...prevLetters, letter];
     });
   }
+
+  const maxAttempts = 8;
+  const wrongGuessArray = guessedLetters.filter(
+    (letter) => !currentWord.includes(letter)
+  ).length;
+
+  console.log(wrongGuessArray);
+  const isGameOver = wrongGuessArray >= maxAttempts;
+
   const keyboardElements = alphabet.split("").map((letter, index) => {
     const isGuessed = guessedLetters.includes(letter);
     const isCorrect = isGuessed && currentWord.includes(letter);
-    const isWrong = !isGuessed && !currentWord.includes(letter);
+    const isWrong = isGuessed && !currentWord.includes(letter);
 
     const className = clsx({
       correct: isCorrect,
@@ -29,7 +37,7 @@ const App = () => {
       <button
         key={index}
         className={className}
-        onClick={() => addGuessedLetter(letter)}
+        onClick={isGameOver ? undefined : () => addGuessedLetter(letter)}
       >
         {letter.toLocaleUpperCase()}
       </button>
