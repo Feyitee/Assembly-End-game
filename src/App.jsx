@@ -2,19 +2,16 @@ import { useState } from "react";
 import { clsx } from "clsx";
 import { languages } from "./languages";
 import { getFarewellText } from "./utils";
-import React from "react";
 
 export default function AssemblyEndgame() {
   // State values
-  const [currentWord, setCurrentWord] = React.useState("react");
-  const [guessedLetters, setGuessedLetters] = React.useState([]);
+  const [currentWord, setCurrentWord] = useState("react");
+  const [guessedLetters, setGuessedLetters] = useState([]);
 
   // Derived values
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter)
   ).length;
-
-  console.log(wrongGuessCount);
   const isGameWon = currentWord
     .split("")
     .every((letter) => guessedLetters.includes(letter));
@@ -23,7 +20,6 @@ export default function AssemblyEndgame() {
   const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
   const isLastGuessIncorrect =
     lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
-  console.log(isLastGuessIncorrect);
 
   // Static values
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -70,6 +66,8 @@ export default function AssemblyEndgame() {
         className={className}
         key={letter}
         disabled={isGameOver}
+        aria-disabled={guessedLetters.includes(letter)}
+        aria-label={`Letter ${letter}`}
         onClick={() => addGuessedLetter(letter)}
       >
         {letter.toUpperCase()}
@@ -108,6 +106,8 @@ export default function AssemblyEndgame() {
         </>
       );
     }
+
+    return null;
   }
 
   return (
@@ -119,10 +119,29 @@ export default function AssemblyEndgame() {
           from Assembly!
         </p>
       </header>
-      <section className={gameStatusClass}>{renderGameStatus()}</section>
+
+      <section aria-live="polite" role="status" className={gameStatusClass}>
+        {renderGameStatus()}
+      </section>
+
       <section className="language-chips">{languageElements}</section>
+
       <section className="word">{letterElements}</section>
+
+      <section className="sr-only" aria-live="polite" role="status">
+        <p>
+          Current word:{" "}
+          {currentWord
+            .split("")
+            .map((letter) =>
+              guessedLetters.includes(letter) ? letter + "." : "blank."
+            )
+            .join(" ")}
+        </p>
+      </section>
+
       <section className="keyboard">{keyboardElements}</section>
+
       {isGameOver && <button className="new-game">New Game</button>}
     </main>
   );
