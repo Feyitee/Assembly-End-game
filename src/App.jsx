@@ -8,6 +8,9 @@ export default function AssemblyEndgame() {
   const [currentWord, setCurrentWord] = React.useState("react");
   const [guessedLetters, setGuessedLetters] = React.useState([]);
 
+  // Static values
+  const maxAttempt = 8;
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
   // Derived values
 
   const wrongGuessCount = guessedLetters.filter(
@@ -16,9 +19,10 @@ export default function AssemblyEndgame() {
 
   const gameOver = wrongGuessCount > 8;
 
-  // Static values
-  const maxAttempt = 8;
-  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  // Every returns a boolean value
+  const gameWon = currentWord
+    .split("")
+    .every((letter) => guessedLetters.includes(letter));
 
   function addGuessedLetter(letter) {
     setGuessedLetters((prevLetters) =>
@@ -84,7 +88,7 @@ export default function AssemblyEndgame() {
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElements}</section>
       <section className="keyboard">{keyboardElements}</section>
-      {gameOver && <button className="new-game">New Game</button>}
+      {(gameWon || gameOver) && <button className="new-game">New Game</button>}
     </main>
   );
 }
