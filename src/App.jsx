@@ -4,27 +4,23 @@ import { languages } from "./languages";
 import React from "react";
 
 export default function AssemblyEndgame() {
-  // State values
   const [currentWord, setCurrentWord] = React.useState("react");
   const [guessedLetters, setGuessedLetters] = React.useState([]);
 
-  // Static values
-  const maxAttempt = 8;
+  // Static variables
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  // Derived values
+
+  // Derivative variables
+  const gameLost = wrongGuessCount >= languages.length - 1;
+  const isgameOver = gameLost || gameLost;
 
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter)
   ).length;
 
-  const gameLost = wrongGuessCount >= languages.length - 1;
-
-  // Every returns a boolean value
   const gameWon = currentWord
     .split("")
     .every((letter) => guessedLetters.includes(letter));
-
-  const isgameOver = gameLost || gameLost;
 
   function addGuessedLetter(letter) {
     setGuessedLetters((prevLetters) =>
