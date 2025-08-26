@@ -158,6 +158,9 @@ button.new-game {
   margin-inline: auto;
   cursor: pointer;
 }
+section.word > span.missed-letter {
+  color: #ec5d49;
+}
 
 section.keyboard > button:disabled {
   cursor: not-allowed;
