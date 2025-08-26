@@ -1,3 +1,6 @@
+import React from "react";
+import { words } from "./words";
+
 export function getFarewellText(language) {
   const options = [
     `Farewell, ${language}`,
@@ -17,3 +20,10 @@ export function getFarewellText(language) {
   const randomIndex = Math.floor(Math.random() * options.length);
   return options[randomIndex];
 }
+
+export function randomWord() {
+  const random = Math.floor(Math.random() * words.length);
+  return words[random];
+}
+
+randomWord();
