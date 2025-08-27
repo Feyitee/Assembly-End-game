@@ -26,4 +26,3 @@ export function randomWord() {
   return words[random];
 }
 
-randomWord();
